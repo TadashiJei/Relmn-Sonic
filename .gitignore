@@ -1,0 +1,46 @@
+# Global ignores for the monorepo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+
+# Env files (keep env.example variants tracked)
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Node/Next
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
+**/.vercel/
+**/coverage/
+**/.nyc_output/
+
+# Frontend outputs
+frontend/.next/
+frontend/out/
+
+# Backend outputs
+backend/dist/
+backend/build/
+
+# Foundry (contracts)
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/lib/
+
+# Temporary
+.tmp/
+.temp/

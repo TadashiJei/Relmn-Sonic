@@ -17,8 +17,17 @@ export class Scribble {
   @Prop()
   contentNonce?: string;
 
+  @Prop()
+  contentAuthTag?: string;
+
   @Prop({ type: [String], default: [] })
   tags?: string[];
+
+  @Prop({ type: Number, default: 0 })
+  upvotes?: number;
+
+  @Prop({ type: Number, default: 0 })
+  commentsCount?: number;
 }
 
 export const ScribbleSchema = SchemaFactory.createForClass(Scribble);

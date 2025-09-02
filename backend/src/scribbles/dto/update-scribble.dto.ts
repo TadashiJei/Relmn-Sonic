@@ -15,6 +15,10 @@ export class UpdateScribbleDto {
   contentNonce?: string;
 
   @IsOptional()
+  @IsString()
+  contentAuthTag?: string;
+
+  @IsOptional()
   @IsArray()
   @ArrayMaxSize(5)
   @IsString({ each: true })

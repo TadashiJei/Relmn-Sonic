@@ -36,4 +36,16 @@ export class ScribesService {
     if (!updated) throw new NotFoundException('Scribe not found');
     return updated;
   }
+
+  async addBadge(scribeId: string, badgeId: string): Promise<Scribe> {
+    const doc = await this.scribeModel
+      .findByIdAndUpdate(
+        scribeId,
+        { $addToSet: { badges: badgeId } },
+        { new: true },
+      )
+      .exec();
+    if (!doc) throw new NotFoundException('Scribe not found');
+    return doc;
+  }
 }

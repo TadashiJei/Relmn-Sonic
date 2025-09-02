@@ -17,7 +17,7 @@ export class User {
   @Prop({ required: false, trim: true })
   country?: string;
 
-  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  @Prop({ required: true, lowercase: true, trim: true })
   email: string;
 
   @Prop({ required: true })
@@ -25,5 +25,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
+// Explicit unique index for email (preferred over @Prop unique)
 UserSchema.index({ email: 1 }, { unique: true });

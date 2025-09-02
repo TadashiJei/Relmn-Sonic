@@ -9,11 +9,11 @@ Links
 ---
 
 ## Phase 0 — Repo & Environment
-- [ ] Create `backend/` Nest app scaffold (`nest new backend`)
-- [ ] Add tooling: ESLint, Prettier, commit hooks (Husky), lint-staged
-- [ ] Choose package manager (npm/pnpm/yarn) and Node LTS (>=18)
-- [ ] Create `.env` and `.env.example`
-- [ ] Configure config module and validation schema
+- [x] Create `backend/` Nest app scaffold (`nest new backend`)
+- [ ] Add tooling: ESLint, Prettier, commit hooks (Husky), lint-staged (ESLint/Prettier present; Husky/lint-staged pending)
+- [ ] Choose package manager (npm/pnpm/yarn) and Node LTS (>=18) (using npm; formal policy TBD)
+- [ ] Create `.env` and `.env.example` (example added; local .env not committed)
+- [x] Configure config module and validation schema
 
 Environment variables (draft)
 ```bash
@@ -33,63 +33,64 @@ CREDENTIAL_REGISTRY_CONTRACT_ADDRESS=0x...
 ```
 
 Dependencies (initial)
-- [ ] `@nestjs/mongoose` `mongoose`
-- [ ] `@nestjs/config` `joi` (for env validation)
-- [ ] `class-validator` `class-transformer`
-- [ ] `@nestjs/jwt` `bcrypt` (auth)
-- [ ] HTTP client: `axios`
-- [ ] Sonic chain SDK: per docs (ethers.js/web3/official SDK)
-- [ ] Logger: `pino` + `nestjs-pino` (optional)
-- [ ] Rate limit: `@nestjs/throttler`
-- [ ] Testing: `@nestjs/testing`, `supertest`
+- [x] `@nestjs/mongoose` `mongoose`
+- [x] `@nestjs/config` `joi` (for env validation)
+- [x] `class-validator` `class-transformer`
+- [x] `@nestjs/jwt` `bcrypt` (auth)
+- [x] HTTP client: `axios`
+- [x] Sonic chain SDK: per docs (ethers.js/web3/official SDK) (using ethers v5)
+- [x] Logger: `pino` + `nestjs-pino` (optional)
+- [x] Rate limit: `@nestjs/throttler`
+- [x] Testing: `@nestjs/testing`, `supertest`
 
 ---
 
 ## Phase 1 — Foundation
-- [ ] AppModule with ConfigModule and MongooseModule
-- [ ] HealthModule: `/health` (liveness/readiness)
-- [ ] Logger setup and request tracing (request-id)
-- [ ] Global validation pipe and exception filters
-- [ ] CORS config for frontend origin
+- [x] AppModule with ConfigModule and MongooseModule
+- [x] HealthModule: `/health` (liveness/readiness)
+- [x] Logger setup and request tracing (request-id) (nestjs-pino + pino-http; x-request-id propagation)
+- [x] Global validation pipe and exception filters (AllExceptionsFilter registered globally)
+- [x] CORS config for frontend origin
+- [x] Swagger/OpenAPI docs at `/docs` (initial setup; pending API updates)
 
 ---
 
 ## Phase 2 — Domain Modules
-- [ ] AuthModule (JWT): register/login/refresh; password hash with bcrypt or wallet-based auth
-- [ ] ScribesModule: profile CRUD, credentials linkage, expert badge state
-- [ ] ScribblesModule: create/read/list; interactions: upvote/comment (stubs first)
-- [ ] CredentialsModule: verification workflow; NFT badge sync
-- [ ] FeesModule: FeeM events, fee splits, treasury accounting (reads from chain, persists summaries)
-- [ ] BlockchainModule: Sonic RPC integration, contract ABIs, tx helpers, event listeners
-- [ ] EncryptionModule: key management for token-gated content (e.g., AES-GCM for content keys)
+- [x] AuthModule (JWT): register/login/refresh; password hash with bcrypt (wallet-based auth optional)
+- [x] ScribesModule: profile CRUD; expert badge state (badge sync on credential verification)
+- [x] ScribblesModule: create/read/list; interactions: upvote/comment (create/read/list + upvote/comment/unlock implemented)
+- [x] CredentialsModule: verification workflow + NFT badge sync + list-by-scribe
+- [x] FeesModule: record/list endpoints (event listeners/treasury calc pending)
+- [x] BlockchainModule: Sonic RPC integration, ContractsRegistry, contract ABIs, tx helpers (getContract/waitForTx)
+- [x] EncryptionModule: key management for token-gated content (e.g., AES-GCM for content keys)
 
 Models (Mongo, draft)
-- [ ] `Scribe { wallet, handle, bio, badges:[string], credentials:[ObjectId], createdAt }`
-- [ ] `Credential { scribeId, type, issuer, proof, status, nftTokenId?, createdAt }`
-- [ ] `Scribble { scribeId, contentPreview, contentCiphertext, contentNonce, tags:[string], createdAt }`
-- [ ] `Interaction { scribbleId, scribeId, type: 'upvote'|'comment', text?, txHash, createdAt }`
-- [ ] `FeeEvent { scribbleId, txHash, amount, payer, recipient, createdAt }`
+- [x] `Scribe { wallet, handle, bio, badges:[string], credentials:[ObjectId], createdAt }`
+- [x] `Credential { scribeId, type, issuer, proof, status, nftTokenId?, createdAt }`
+- [x] `Scribble { scribeId, contentPreview, contentCiphertext, contentNonce, tags:[string], createdAt }` (also: contentAuthTag, upvotes, commentsCount)
+- [x] `Interaction { scribbleId, scribeId, type: 'upvote'|'comment', text?, txHash, createdAt }` (txHash pending)
+- [x] `FeeEvent { scribbleId, txHash, amount, payer, recipient, createdAt }`
 
 ---
 
 ## Phase 3 — Sonic Blockchain Integration
-- [ ] Decide SDK per Sonic docs (ethers.js vs official SDK) and add provider from Blaze
-- [ ] Load contract ABIs and addresses from config
-- [ ] Implement `BlockchainService` with:
-  - [ ] read calls: fetch scribble metadata, credential status, fee splits
-  - [ ] write calls: publishScribble, upvote, comment, unlockContent
-  - [ ] event subscriptions: FeeM distributions, credential issued, scribble created
-- [ ] Verify network params (chainId, gas config) from Blaze
-- [ ] Add retry/backoff and error classification
+- [x] Decide SDK per Sonic docs (ethers.js vs official SDK) and add provider from Blaze (using ethers v5 JSON-RPC provider)
+- [x] Load contract ABIs and addresses from config (ContractsRegistry)
+- [x] Implement `BlockchainService` with:
+  - [x] read calls: fetch scribble metadata, credential status, fee splits
+  - [x] write calls: publishScribble, upvote, comment, unlockContent
+  - [x] event subscriptions: FeeM distributions, credential issued, scribble created
+- [x] Verify network params (chainId, gas config) from Blaze
+- [x] Add retry/backoff and error classification
 
 ---
 
 ## Phase 4 — Security & Policies
-- [ ] JWT auth guards and role guards
-- [ ] Input validation and sanitization
-- [ ] Rate limiting & basic abuse protections
-- [ ] Secrets management (do not commit .env)
-- [ ] Audit sensitive logs (no secrets)
+- [x] JWT auth guards and role guards
+- [x] Input validation and sanitization
+- [x] Rate limiting & basic abuse protections
+- [x] Secrets management (do not commit .env)
+- [x] Audit sensitive logs (no secrets)
 
 ---
 

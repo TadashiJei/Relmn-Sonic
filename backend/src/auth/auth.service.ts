@@ -33,4 +33,9 @@ export class AuthService {
   private async sign(sub: string, email: string) {
     return this.jwtService.signAsync({ sub, email });
   }
+
+  async refresh(sub: string, email: string) {
+    const accessToken = await this.sign(sub, email);
+    return { accessToken };
+  }
 }

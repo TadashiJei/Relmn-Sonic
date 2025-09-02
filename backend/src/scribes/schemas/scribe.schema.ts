@@ -5,10 +5,10 @@ export type ScribeDocument = HydratedDocument<Scribe>;
 
 @Schema({ timestamps: true })
 export class Scribe {
-  @Prop({ required: true, unique: true, lowercase: true })
+  @Prop({ required: true, lowercase: true })
   wallet!: string; // EVM address
 
-  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  @Prop({ required: true, lowercase: true, trim: true })
   handle!: string; // unique username/handle
 
   @Prop({ default: '' })
@@ -19,6 +19,6 @@ export class Scribe {
 }
 
 export const ScribeSchema = SchemaFactory.createForClass(Scribe);
-// Explicit indexes to ensure creation
+// Explicit indexes (preferred over @Prop unique) to avoid duplicate index warnings
 ScribeSchema.index({ handle: 1 }, { unique: true });
 ScribeSchema.index({ wallet: 1 }, { unique: true });
